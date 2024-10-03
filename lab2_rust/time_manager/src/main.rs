@@ -10,7 +10,7 @@ where
     let start = Instant::now();
     block();
     let duration = start.elapsed();
-    println!("time fron timer 1: {:.2?}", duration.as_secs_f64());
+    println!("time1: {:.2?}", duration.as_secs_f64());
 }
 
 // Реализация аналогичная cm_timer_2
@@ -27,7 +27,7 @@ impl CmTimer2 {
 
     fn stop(self) {
         let duration = self.start.elapsed();
-        println!("time from timer 2: {:.2?}", duration.as_secs_f64());
+        println!("time2: {:.2?}", duration.as_secs_f64());
     }
 }
 
