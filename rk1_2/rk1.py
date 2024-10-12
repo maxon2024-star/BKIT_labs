@@ -63,45 +63,82 @@ class ChapterBook:
 books = [
     Book(1, "Boeing 737 flight instruction(self-education)"),
     Book(2, "Международный центр торговли США. История"),
-    Book(3, "Апонские хокку самураев и камикадзе в картинках")
- ]
+    Book(3, "Японские хокку самураев и камикадзе в картинках"),
+
+    Book(11, "Boeing 737 flight instruction(self-education). Редакция 2"),
+    Book(22, "Международный центр торговли США. История (переписанная)"),
+    Book(33, "Японские хокку самураев и камикадзе в картинках. Осовремененая"),
+]
 
 chapters = [
     Chapter(1,"Глава 1", 10, 1),
-    Chapter(1,"Глава 1", 91, 1),
-    Chapter(1,"Глава 1", 50, 2),
-    Chapter(1,"Глава 1", 20, 3),
-    Chapter(1,"Глава 1", 30, 3)
+    Chapter(2,"Глава 2", 91, 1),
+    Chapter(3,"Глава 33", 50, 2),
+    Chapter(4,"Глава 5", 20, 3),
+    Chapter(5,"Глава 69", 30, 3),
  ]
 
- # Запрос 1: Список всех книг, у которых название начинается с буквы "А", и список их глав
-def query_books_starting_with_a():
-    result = {}
-    for book in books:
-        if book.name.startswith('А'):
-            chapters_in_book = [ch.title for ch in chapters if ch.book_id == book.id]
-            result[book.name] = chapters_in_book
-    return result
+ch_b =[
+    ChapterBook(1,1),
+    ChapterBook(2,2),
+    ChapterBook(3,3),
+    ChapterBook(3,4),
+    ChapterBook(3,5),
 
-# Запрос 2: Список книг с максимальной длиной глав
-def query_books_with_max_chapter_length():
-    result = {}
-    for book in books:
-        book_chapters = [ch for ch in chapters if ch.book_id == book.id]
-        if book_chapters:
-            max_chapter = max(book_chapters, key=lambda ch: ch.pages)
-            result[book.name] = (max_chapter.title, max_chapter.pages)
-    return dict(sorted(result.items(), key=lambda x: x[1][1], reverse=True))
 
-# Запрос 3: Список всех связанных глав и книг, отсортированных по книгам
-def query_all_related_chapters_and_books():
-    result = {}
-    for book in books:
-        related_chapters = [ch.title for ch in chapters if ch.book_id == book.id]
-        result[book.name] = related_chapters
-    return result
+    ChapterBook(11,1),
+    ChapterBook(22,2),
+    ChapterBook(33,3),
+    ChapterBook(33,4),
+    ChapterBook(33,5),   
+]
 
-# Выполнение запросов
-print("Запрос 1:", query_books_starting_with_a())
-print("Запрос 2:", query_books_with_max_chapter_length())
-print("Запрос 3:", query_all_related_chapters_and_books())
+
+def main():
+     # Запрос 1: Список всех книг, у которых название начинается с буквы "Я", и список их глав
+    def query_books_starting_with_ya():
+        result = {}
+        for book in books:
+            if book.name.startswith('Я'):
+                chapters_in_book = [ch.title for ch in chapters if ch.book_id == book.id]
+                result[book.name] = chapters_in_book
+        return result
+
+    # Запрос 2: Список книг с максимальной длиной глав
+    def query_books_with_max_chapter_length():
+        result = {}
+        for book in books:
+            book_chapters = [ch for ch in chapters if ch.book_id == book.id]
+            if book_chapters:
+                max_chapter = max(book_chapters, key=lambda ch: ch.pages)
+                result[book.name] = (max_chapter.title, max_chapter.pages)
+        return dict(sorted(result.items(), key=lambda x: x[1][1], reverse=True))
+
+     # Соединение данных многие-ко-многим
+    many_to_many_temp = [(b.name, cb.book_id, cb.chapter_id) 
+        for b in books 
+        for cb in ch_b 
+        if b.id==cb.book_id]
+    
+    many_to_many = [(c.title, c.pages, book_name) 
+        for book_name, book_id, chapter_id in many_to_many_temp
+        for c in chapters if c.id==chapter_id]
+    
+
+    # Запрос 3: Список всех связанных глав и книг, отсортированных по книгам
+    def query_all_related_chapters_and_books():
+        result = {}
+        for book in books:
+            related_chapters = list(filter(lambda i: i[2]==book.name, many_to_many))
+            result[book.name] = related_chapters
+        return result
+
+    # Выполнение запросов
+    print("\nЗапрос 1:\n", query_books_starting_with_ya())
+    print("\nЗапрос 2:\n", query_books_with_max_chapter_length())
+    print("\nЗапрос 3:\n", query_all_related_chapters_and_books())
+
+
+
+if __name__ == "__main__":
+     main()
