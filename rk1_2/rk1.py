@@ -61,13 +61,13 @@ class ChapterBook:
 
 # данные
 books = [
-    Book(1, "Boeing 737 flight instruction(self-education)"),
-    Book(2, "Международный центр торговли США. История"),
-    Book(3, "Японские хокку самураев и камикадзе в картинках"),
+    Book(1, "Boeing 737 flight(self-education)"),
+    Book(2, "МЦТ США. История"),
+    Book(3, "Апчихба и другие мемы"),
 
-    Book(11, "Boeing 737 flight instruction(self-education). Редакция 2"),
-    Book(22, "Международный центр торговли США. История (переписанная)"),
-    Book(33, "Японские хокку самураев и камикадзе в картинках. Осовремененая"),
+    Book(11, "Boeing 737 flight(self-education). Редакция 2"),
+    Book(22, "МЦТ США. История (переписанная)"),
+    Book(33, "Апчихба и другие мемы. Редакция 2"),
 ]
 
 chapters = [
@@ -76,6 +76,12 @@ chapters = [
     Chapter(3,"Глава 33", 50, 2),
     Chapter(4,"Глава 5", 20, 3),
     Chapter(5,"Глава 69", 30, 3),
+
+        Chapter(1,"Глава 1", 10, 11),
+    Chapter(2,"Глава 2", 91, 11),
+    Chapter(3,"Глава 33", 50, 22),
+    Chapter(4,"Глава 5", 20, 33),
+    Chapter(5,"Глава 69", 30, 33),
  ]
 
 ch_b =[
@@ -95,11 +101,11 @@ ch_b =[
 
 
 def main():
-     # Запрос 1: Список всех книг, у которых название начинается с буквы "Я", и список их глав
+     # Запрос 1: Список всех книг, у которых название начинается с буквы "А", и список их глав
     def query_books_starting_with_ya():
         result = {}
         for book in books:
-            if book.name.startswith('Я'):
+            if book.name.startswith('А'):
                 chapters_in_book = [ch.title for ch in chapters if ch.book_id == book.id]
                 result[book.name] = chapters_in_book
         return result
